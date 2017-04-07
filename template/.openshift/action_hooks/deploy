@@ -1,8 +1,12 @@
-#!/bin/bash
+#!/bin/sh
+export SYMFONY_ENV=prod
+cd $OPENSHIFT_REPO_DIR
 
-echo "Deploying..."
-build_config
+#If you are planning to upload files - they have to be stored in $OPENSHIFT_DATA_DIR
+#Otherwise they will be deleted on every deployment.
+#ln -s $OPENSHIFT_DATA_DIR/uploads web
 
-# Uncomment the following line to use Composer and automatically install dependencies on deploy.
-#
-#cd $OPENSHIFT_REPO_DIR; composer install
+composer install --no-dev --optimize-autoloader
+
+#if you are using DoctrineMigrationsBundle
+#php app/console doctrine:migrations:migrate
